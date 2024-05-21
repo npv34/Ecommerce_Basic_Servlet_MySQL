@@ -7,8 +7,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 @WebServlet(name = "authServlet", urlPatterns = {"/auth/*"})
 public class AuthServlet extends HttpServlet {
@@ -84,8 +86,13 @@ public class AuthServlet extends HttpServlet {
             String password = req.getParameter("password");
             User user =  this.userModel.findUser(username, password);
             if (user != null) {
-                resp.sendRedirect("/home");
+                HttpSession session = req.getSession(true);
+                session.setAttribute("username", user.getUsername());
+                resp.sendRedirect("/admin");
             } else {
+                HttpSession session = req.getSession(false);
+                session.setAttribute("errorLogin", "Account not found");
+                System.out.println("Account not found");
                 resp.sendRedirect("/auth/login");
             }
         } catch (SQLException e) {

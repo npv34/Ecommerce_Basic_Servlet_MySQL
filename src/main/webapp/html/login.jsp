@@ -20,6 +20,8 @@
                     <h2>Login</h2>
                 </div>
                 <div class="card-body">
+                    <% String errMess = (String)request.getSession().getAttribute("errorLogin"); %>
+                    <p class="<%= errMess != null ? "alert alert-danger" : ""%>"><%= errMess != null ? errMess : "" %></p>
                     <form method="post" action="/auth/login">
                         <div class="mb-3">
                             <label for="exampleInputEmail1" class="form-label">Email</label>
